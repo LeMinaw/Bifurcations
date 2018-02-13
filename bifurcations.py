@@ -112,9 +112,10 @@ if __name__ == '__main__':
     from multiprocessing import Pool
     import laws
 
-    pop_1 = Population(laws.logistic_clamp, [lambda y, i: y, 2, 2])
-    pop_2 = Population(laws.logistic_clamp, [lambda y, i: y, 3, 2])
-    pop_3 = Population(laws.logistic_clamp, [lambda y, i: y, 3.5])
+    y = lambda y, i: y
+    pop_1 = Population(laws.logistic_clamp, [y, 2, 2])
+    pop_2 = Population(laws.logistic_clamp, [y, 3, 2])
+    pop_3 = Population(laws.logistic_clamp, [y, 3.5])
 
     sys = PopulationSystem({
         pop_1: {            pop_2:  .3, pop_3:  .4},
