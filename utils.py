@@ -6,7 +6,7 @@ import re
 
 def clamp(x, inf=0, sup=1):
     """Clamps x in the range [inf, sup]."""
-    return min(sup, max(inf, x))
+    return inf if x < inf else sup if x > sup else x
 
 def replace_patterns(string, patterns):
     """Replaces multiple patterns in a string.
