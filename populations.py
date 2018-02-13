@@ -79,7 +79,7 @@ class PopulationSystem:
         if type(pops) is not dict:
             pops = {pop: {} for pop in pops}
         else:
-            for pop, relations in pops:
+            for pop, relations in pops.items():
                 if pop in relations:
                     raise ValueError("A population cannot be in relation with itself. Use population's fertility for that.")
         self.__populations = pops
