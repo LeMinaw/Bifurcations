@@ -66,7 +66,7 @@ class Diagram:
                     pix_color = cmap(state_index, 0, self.system.iterations / 2)
                     try:
                         pixels[pix_y, pix_x] = pix_color
-                    except IndexError:
+                    except (IndexError, ValueError):
                         print("Out of range: (%s:%s)" % (pix_y, pix_x))
 
         if path is not None or filename is not None:
