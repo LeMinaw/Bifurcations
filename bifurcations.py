@@ -1,36 +1,8 @@
 """This module contains stuff for generating bifurcation diagrams."""
 
-from PIL   import Image
-from utils import replace_patterns, lin_interp
-
-class ColorMap:
-    """Basic linear colormaps."""
-
-    def __init__(self, start, end):
-        """Creates a new ColorMap.
-        - start: Start color
-        - end: End color
-        Colors are 8-bit RGB colors, so (r, g, b) tuples of integers in [0, 255]."""
-        self.start, self.end = start, end
-        self.start, self.end = start, end
-
-    def __call__(self, x, start=0, end=1):
-        """Will map a value to a color.
-        - x: The value a color will be mapped to
-        - start: Value that will be mapped to the ColorMap start color
-        - end: Value that will be mapped to the ColorMap end color"""
-        return tuple([abs(int(lin_interp(x, start, end, self.start[i], self.end[i]))) for i in range(3)])
-
-
-black           = ColorMap((000, 000, 000), (000, 000, 000))
-white_to_black  = ColorMap((000, 000, 000), (255, 255, 255))
-blue_to_red     = ColorMap((000, 000, 255), (255, 000, 000))
-cyan_to_red     = ColorMap((000, 255, 255), (255, 000, 000))
-black_to_red    = ColorMap((000, 000, 000), (255, 000, 000))
-red_to_black    = ColorMap((255, 000, 000), (000, 000, 000))
-blue_to_black   = ColorMap((000, 190, 255), (000, 000, 000))
-orange_to_black = ColorMap((255, 145, 000), (000, 000, 000))
-
+from PIL       import Image
+from utils     import replace_patterns, lin_interp
+from colormaps import black, blue_to_black, red_to_black, orange_to_black
 
 class Diagram:
     """This class represents a statistial states diagram (such as bifurcation diagrams)."""
@@ -113,15 +85,15 @@ if __name__ == '__main__':
     import laws
 
     y = lambda y, i: y
-    pop_1 = Population(laws.logistic_clamp, [y, 2, 2])
-    pop_2 = Population(laws.logistic_clamp, [y, 3, 2])
-    pop_3 = Population(laws.logistic_clamp, [y, 3.5])
+    pop_1 = Population(laws.logistic_env, [y])
+    pop_2 = Population(laws.logistic_env, [y])
+    pop_3 = Population(laws.logistic_env, [y])
 
     sys = PopulationSystem({
-        pop_1: {            pop_2:  .3, pop_3:  .4},
-        pop_2: {pop_1: -.3,             pop_3:  .5},
-        pop_3: {pop_2: -.4, pop_2: -.5}
-    }, iterations=1000) # iterations = 0.3 * height
+        pop_1: {            pop_2:  2, pop_3: -2},
+        pop_2: {pop_1: -2,             pop_3:  2},
+        pop_3: {pop_2:  2, pop_2: -2}
+    }, iterations=400) # iterations = 0.3 * height
 
-    diag = Diagram(sys, y_min=0, y_max=4, width=1920*4, height=1080*4, colormaps=[red_to_black, blue_to_black, orange_to_black])
-    diag.render('')
+    diag = Diagram(sys, y_min=0, y_max=4, width=1920, height=1080, colormaps=[red_to_black, blue_to_black, orange_to_black])
+    diag.render().show()
