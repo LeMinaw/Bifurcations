@@ -8,7 +8,8 @@ import os
 ap = argparse.ArgumentParser()
 ap.add_argument("-ext", "--extension", required=False, default='png',        help="extension name. default is 'png'.")
 ap.add_argument("-o",   "--output",    required=False, default='output.mp4', help="output video file")
-ap.add_argument("-f",   "--factor",    required=False, default='2',          help="size reduction factor")
+ap.add_argument("-f",   "--factor",    required=False, default='1',          help="size reduction factor")
+ap.add_argument("-c",   "--video",     required=False, default='0',          help="show video")
 args = vars(ap.parse_args())
 
 # Arguments
@@ -16,6 +17,7 @@ dir_path = '.'
 ext    = args['extension']
 output = args['output']
 factor = float(args['factor'])
+show = bool(args['video'])
 
 images = []
 for f in os.listdir(dir_path):
@@ -26,7 +28,8 @@ for f in os.listdir(dir_path):
 image_path = os.path.join(dir_path, images[0])
 frame = cv2.imread(image_path)
 frame = cv2.resize(frame, None, fx=1/factor, fy=1/factor, interpolation=cv2.INTER_AREA)
-cv2.imshow('video', frame)
+if show:
+    cv2.imshow('video', frame)
 height, width, channels = frame.shape
 
 # Define the codec and create VideoWriter object
@@ -41,7 +44,8 @@ for image in images:
 
     out.write(frame) # Write out frame to video
 
-    cv2.imshow('video',frame)
+    if show:
+        cv2.imshow('video',frame)
     if (cv2.waitKey(1) & 0xFF) == ord('q'): # Hit `q` to exit
         break
 
