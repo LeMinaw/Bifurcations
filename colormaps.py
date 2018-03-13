@@ -11,7 +11,6 @@ class ColorMap:
         - end: End color
         Colors are 8-bit RGB colors, so (r, g, b) tuples of integers in [0, 255]."""
         self.start, self.end = start, end
-        self.start, self.end = start, end
 
     def __call__(self, x, start=0, end=1, max_out=255):
         """Will map a value to a color.
